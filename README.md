@@ -4,6 +4,7 @@ Web-based simfile editor
 Parses an `.sm` file into JSON. To use, run `python parse-simfile.py song.sm`. It will create a new file called `result.json`.
 #### Example results.json
 Results are abridged for brevity.
+
 `python parse-simfile.py 'Chocolate Groove.sm'`
 ```JSON
 {
