@@ -40,12 +40,16 @@ file.seek(0)
 
 # Get stops
 match = re.search('#STOPS:([0-9.='+os.linesep+',]*);', file.read())
+
 stop_strings = match.group(1).split(',')
 stops = {}
 
-for stop in stop_strings:
-    stop_line = stop.split("=")
-    stops[stop_line[0].strip()] = stop_line[1].strip()
+# Even if there are no stops it'll parse as [['']]
+if (len(stop_strings[0]) > 1):
+    for stop in stop_strings:
+        stop_line = stop.split("=")
+
+        stops[stop_line[0].strip()] = stop_line[1].strip()
 
 file.seek(0)
 
@@ -93,8 +97,14 @@ for line in file.readlines():
         # we're on a step inside of a measure
         elif prefix.isalnum():
             curr_measure.append(line.strip()) 
-        elif ':' in line:
+        # This is a catch for when the description's colon starts on the next line
+        elif len(curr_notes) == 1:
             curr_notes.append(line.strip()[:-1])
+        # Add notes
+        elif ':' in line:
+            if line.strip() != ":":
+                curr_notes.append(line.strip()[:-1])
+        
 
 file.close()
 
